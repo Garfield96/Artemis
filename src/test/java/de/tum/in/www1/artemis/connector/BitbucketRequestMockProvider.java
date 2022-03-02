@@ -184,22 +184,15 @@ public class BitbucketRequestMockProvider {
                 .andRespond(withStatus(HttpStatus.OK).contentType(MediaType.APPLICATION_JSON).body(mapper.writeValueAsString(bitbucketRepository)));
     }
 
-    public void mockConfigureRepository(ProgrammingExercise exercise, String username, Set<User> users, boolean ltiUserExists) throws URISyntaxException, IOException {
+    public void mockConfigureRepository(ProgrammingExercise exercise, String username, Set<User> users, boolean userExists) throws URISyntaxException, IOException {
         final var projectKey = exercise.getProjectKey();
         final var repoName = projectKey.toLowerCase() + "-" + username.toLowerCase();
         for (User user : users) {
             // add mock for userExists() check, if the username contains edx_ or u4i_
             String loginName = user.getLogin();
-            if (userPrefixEdx.isPresent() && loginName.startsWith(userPrefixEdx.get()) || userPrefixU4I.isPresent() && loginName.startsWith(userPrefixU4I.get())) {
-                if (ltiUserExists) {
-                    mockUserExists(loginName);
-                }
-                else {
-                    mockUserDoesNotExist(loginName);
-                    String displayName = (user.getFirstName() + " " + user.getLastName()).trim();
-                    mockCreateUser(loginName, passwordService.decryptPassword(user.getPassword()), user.getEmail(), displayName);
-                    mockAddUserToGroups();
-                }
+
+            if (!userExists) {
+                throw new BitbucketException("The user was not created in Bitbucket and has to be manually added.");
             }
             mockGiveWritePermission(exercise, repoName, user.getLogin(), HttpStatus.OK);
         }

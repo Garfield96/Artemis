@@ -1355,14 +1355,14 @@ public class ExamIntegrationTest extends AbstractSpringIntegrationBambooBitbucke
         assertThat(studentExamRepository.findStudentExam(programmingExercise2, participationEx2St2).get()).isEqualTo(studentExam2);
 
         bitbucketRequestMockProvider.mockUserExists(student1.getLogin());
-        mockConfigureRepository(programmingExercise, "student1", Set.of(student1), false);
+        mockConfigureRepository(programmingExercise, "student1", Set.of(student1), true);
         bitbucketRequestMockProvider.mockUserExists(student2.getLogin());
-        mockConfigureRepository(programmingExercise, "student2", Set.of(student2), false);
+        mockConfigureRepository(programmingExercise, "student2", Set.of(student2), true);
 
         bitbucketRequestMockProvider.mockUserExists(student1.getLogin());
-        mockConfigureRepository(programmingExercise2, "student1", Set.of(student1), false);
+        mockConfigureRepository(programmingExercise2, "student1", Set.of(student1), true);
         bitbucketRequestMockProvider.mockUserExists(student2.getLogin());
-        mockConfigureRepository(programmingExercise2, "student2", Set.of(student2), false);
+        mockConfigureRepository(programmingExercise2, "student2", Set.of(student2), true);
 
         Integer numOfUnlockedExercises = request.postWithResponseBody("/api/courses/" + course1.getId() + "/exams/" + exam.getId() + "/student-exams/unlock-all-repositories",
                 Optional.empty(), Integer.class, HttpStatus.OK);
