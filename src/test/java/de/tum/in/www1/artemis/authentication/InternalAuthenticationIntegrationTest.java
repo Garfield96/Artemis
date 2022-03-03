@@ -109,6 +109,7 @@ public class InternalAuthenticationIntegrationTest extends AbstractSpringIntegra
         student = userRepository.findOneWithGroupsAndAuthoritiesByLogin(USERNAME).get();
         final var encodedPassword = passwordService.hashPassword(USER_PASSWORD);
         student.setPassword(encodedPassword);
+        student.setInternal(true);
         userRepository.save(student);
         ltiLaunchRequest.setLis_person_contact_email_primary(student.getEmail());
     }

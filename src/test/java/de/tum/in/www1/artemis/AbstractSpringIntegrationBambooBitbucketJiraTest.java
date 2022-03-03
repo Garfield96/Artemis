@@ -386,13 +386,17 @@ public abstract class AbstractSpringIntegrationBambooBitbucketJiraTest extends A
     }
 
     @Override
-    public void mockUpdateUserInUserManagement(String oldLogin, User user, Set<String> oldGroups) throws JsonProcessingException {
+    public void mockUpdateUserInUserManagement(String oldLogin, User user, Set<String> oldGroups) throws JsonProcessingException, URISyntaxException {
         var managedUserVM = new ManagedUserVM(user);
         jiraRequestMockProvider.mockIsGroupAvailableForMultiple(managedUserVM.getGroups());
         jiraRequestMockProvider.mockRemoveUserFromGroup(oldGroups, managedUserVM.getLogin(), false);
         jiraRequestMockProvider.mockAddUserToGroupForMultipleGroups(managedUserVM.getGroups());
 
         bitbucketRequestMockProvider.mockUpdateUserDetails(oldLogin, user.getEmail(), user.getFirstName() + " " + user.getLastName());
+        bitbucketRequestMockProvider.mockUpdateUserPassword(user.getLogin(), user.getPassword(), true);
+        bitbucketRequestMockProvider.mockAddUserToGroups();
+        bitbucketRequestMockProvider.mockRemoveUserFromGroup(user.getLogin(), "testgroup");
+        bitbucketRequestMockProvider.mockRemoveUserFromGroup(user.getLogin(), "tumuser");
     }
 
     @Override

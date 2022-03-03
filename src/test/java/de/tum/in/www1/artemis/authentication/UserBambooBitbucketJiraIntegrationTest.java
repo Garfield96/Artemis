@@ -33,10 +33,6 @@ public class UserBambooBitbucketJiraIntegrationTest extends AbstractSpringIntegr
     @Test
     @WithMockUser(username = "admin", roles = "ADMIN")
     public void updateUser_asAdmin_isSuccessful() throws Exception {
-        bitbucketRequestMockProvider.mockUpdateUserDetails(userTestService.student.getLogin(), "bonobo42@tum.com", "Bruce Wayne");
-        bitbucketRequestMockProvider.mockAddUserToGroups();
-        bitbucketRequestMockProvider.mockRemoveUserFromGroup(userTestService.student.getLogin(), "testgroup");
-        bitbucketRequestMockProvider.mockRemoveUserFromGroup(userTestService.student.getLogin(), "tumuser");
         userTestService.updateUser_asAdmin_isSuccessful();
     }
 
